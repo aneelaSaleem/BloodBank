@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="span12 offset4" id="session">
+    @ViewBag.result
+</div>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12 offset2">
+            <div class="row">
+                <div class="span8 offset2">
+                    <div class=" well sidebar-nav">
+                        <div id="login">
+                            <h3><u>User Account</u></h3>
+                            <form method="post" id="loginform" onsubmit="return login()">
+                                <label>User Id</label>
+                                <input type="text" name="userid" id="userid" style="width: 150px" />
+                                <label>Password</label>
+                                <input type="password" name="password" id="password" style="width: 150px" /><br />
+                                <span id="errors"></span>
+                                <input type="submit" id="submit" value="Sign in" class="btn btn-primary" />
+                            </form>
+                            <a href="/Home/ForgetPassword">
+                                <label>Forgot Your Password</label></a>
+                            <a href="/Home/Signup">
+                                <label>Create New Account</label></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function login() {
+        var uname = $('#userid').val();
+        var pwd = $('#password').val();
+        var text = "<ul>";
+        if (uname.length == 0)
+            text += "<li>Please Enter user id</li>";
+        if (pwd.length == 0)
+            text += "<li>Please Enter password</li></ul>";
+        
+        if (text.length > 5) {
+            $('#errors').css('color', 'red');
+            $('#errors').html(text);
+            return false;
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/home/Login', data: $('#loginform').serialize(),
+            success: function (x) {
+                if (x == "Not") {
+                    $('#errors').css('color', 'red');
+                    $('#errors').text("Invalid Username or Password");
+                    $('#errors').append('<br/>');
+                }
+                else {
+                    window.location.href = x;
+                }
+            },
+            error: function (x) {
+                $('#errors').css('color', 'red');
+                $('#errors').text(x + "<br />");
+            }
+        })
+        return false;
+    }
+</script>

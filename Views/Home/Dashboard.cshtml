@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_userLayout.cshtml";
+}
+@using PagedList
+@using PagedList.Mvc
+@model IPagedList<MyWeb.Models.Event>
+<div class="container-fluid">  
+  <div class="row-fluid">   
+    <div class="span12 offset3" >  
+      <div class="row">
+          <div class="span9">
+                  @foreach (var item in Model)
+                  {
+                      <div class="well">
+                          <p>@item.Post</p>
+                          <p><b>Posted By:</b> @item.username on @item.date</p>
+                      </div>
+                  }
+          </div>
+      </div>
+        <div class="pagedList">
+        @Html.PagedListPager(Model, page => Url.Action("Dashboard", new { page }), PagedListRenderOptions.TwitterBootstrapPagerAligned)
+    </div>
+    </div>  
+  </div>  
+</div> 

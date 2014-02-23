@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "post";
+    Layout = "~/Views/Shared/_userLayout.cshtml";
+}
+
+
+<div class="container-fluid">  
+  <div class="row-fluid">    
+    <div class="span12 offset3" >  
+      <div class="row">
+          <div class="span9">
+              You can post here to request other people for blood and you can also share personal experiences here so that people may get advantage from your
+              experience<br />
+              <br />
+              <div class="well">
+                  <form id="feedback" onsubmit="return evaluation()">
+                     <label style="color:blue">Write Some Annoucement here</label>
+                      <textarea name="comments" id="comment" required>
+                      </textarea><br />
+                      <label>Date</label>
+                      <input type="date" name="date" id="date" required/><br />
+                      <span id="result"></span>
+                      <input type="submit" value="Submit" class="btn btn-primary" />
+                  </form>
+              </div>
+          </div>
+      </div>
+    </div>  
+  </div>  
+</div> 
+<script>
+    function evaluation() {
+        var date = $('#date').val();
+        var comment=$('#comment')
+        $.ajax({
+            type: 'POST',
+            url: '/home/makeAnnouncement', data: $('#feedback').serialize(),
+            success: function (x) {
+                $('#result').css('color','blue');
+                $('#result').text(x);
+                $('#result').append('<br/>');
+            },
+            error: function (x) {
+                $('#result').css('color', 'red');
+                $('#result').text(x);
+                $('#result').append('<br/>');
+            }
+        })
+        return false;
+    }
+</script>

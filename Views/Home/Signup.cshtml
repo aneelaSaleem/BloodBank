@@ -1,0 +1,70 @@
+﻿@{ ViewBag.Title = "Create Account"; Layout = "~/Views/Shared/_Layout.cshtml"; }
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span9 offset4 well">
+            <h2>Create New Account</h2>
+            <h2>Please Provide following information</h2>
+            <form method="post" id="signupform" onsubmit="return signup()">
+                <label>Full Name</label>
+                <input type="text" name="fullname" id="fullname" />
+                <label>User Name</label>
+                <input type="text" name="username" id="username" />
+                <label>Password</label>
+                <input type="password" name="password" id="password" /><br />
+                <label>Contact#</label>
+                <input type="tel" name="Cell" id="Cell" /><br />
+                <label>Email</label>
+                <input type="email" name="email" id="email" />
+                <label>Blood Group</label>
+                <select class="combobox combobox-primary" id="bloodgroup" name="bloodgroup" required>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select><br />
+                <span id="errors"></span>
+                <input type="submit" class="btn btn-primary" value="Submit" />
+            </form>
+        </div>
+    </div>
+</div>
+<script> function signup() { 
+     var uname = $('#username').val(); 
+     var pwd = $('#password').val(); 
+     var fname = $('#fullname').val(); 
+     var email = $('#email').val(); 
+     var cell = $('#Cell').val();
+     var bloodgroup = $('#bloodgroup').val();
+     var text = "<ul>"; 
+     if (uname.length == 0) 
+         text += "<li>Please Enter user name</li>"; 
+     if (cell.length == 0)
+         text += "<li>Please Enter Contact Number</li>"; 
+     if (pwd.length == 0) text += "<li>Please Enter password</li>";
+     if (fname.length == 0) 
+         text += "<li>Please Enter Full name</li>"; 
+     if (email.length == 0) 
+         text += "<li>Please Enter email</li>";
+     if (bloodgroup.length == 0) 
+         text += "<li>Please Select bloodgroup</li></ul>";
+     $('#errors').html(text); 
+     if (text.length > 5) 
+         return false; 
+     $.ajax({ type: 'POST', url: '/home/saveUser', data: $('#signupform').serialize(), 
+         success: function (x) {
+             $('#errors').css('color', 'blue');
+              $('#errors').append('<br/>');
+             $('#errors').text(x); $('#errors').append('<br/>');
+         }, error: function (x) {
+             $('#errors').css('color', 'red'); $('#errors').text(x);
+             $('#errors').append('<br/>');
+         }
+     });
+     return false;
+     }
+
+</script>

@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "SimpleSearch";
+    Layout = "~/Views/Shared/_userLayout.cshtml";
+}
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="row">
+                <div class="span3 offset1">
+                    <img src="../images/image1.jpg" alt="img" class="img-circle" />
+                </div>
+                <div class="span8">
+                    Here you will select the blood group and will get contact information of all doners who have your selected blood group.
+                    Feel free to contact with our blood doners. They are here to save lives of needy people.
+              <br />
+                    <br />
+                    <div>
+                        
+                            <label>Blood Group</label>
+                            <select class="combobox combobox-primary" id="bloodgroup" name="query" required>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select><br />
+                            <span id="q"></span>
+                            <input type="button" value="Search" class="btn btn-primary" onclick="Find()"/>
+                        
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="span12 offset3" id="res">
+    <table></table>
+</div>
+<script>
+    function Find() {
+        var query = $('#bloodgroup').val();
+        var text = "<ul>";
+        if (query.length == 0)
+            text += "<li>Please Select some blood group</li></ul>";
+        if (text.length > 5) {
+            $('#q').css('color', 'red');
+            $('#q').html(text);
+        }
+        $.getJSON("/home/SimpleSearchResult", { q: query })
+            .done(function (data) {
+                
+                $('#res table').remove();
+                $('#res').css("class","span12 offset3 well");
+                $('#res').append("<table class='table' border='0' id='tbl'>")
+                $('#tbl').append('<thead>')
+                $('#tbl').append('<th>Doner Name</th>')
+                $('#tbl').append('<th> Blood Group</th>')
+                $('#tbl').append('<th> Contact#</th>')
+                $('#tbl').append('<th> Email</th>')
+                $('#tbl').append("<th>Request</th>")
+                $('#tbl').append('</thead>')
+                $.each(data, function (i, item)
+                {
+                    var contact = item.Email + ";" + item.Cell;
+                    var html = "<tr><td>" + item.FullName + "</td><td>" + item.Blood + "</td><td>" + item.Cell + "</td><td>" + item.Email + "</td>";
+                    html += "<td><a href='/home/RequestBlood?contact=" + contact + "'>Request Blood</a></td>"
+                    $('#tbl').append(html);
+                    
+                })
+                $('#res').append("</table>")
+            })
+            .fail(function (jqxhr, textStatus, error) {
+                var err = textStatus + ", " + error;
+                alert(err);
+            });
+        
+    }
+</script>
+

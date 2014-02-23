@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "Announcement";
+    Layout = "~/Views/Shared/adminLayout.cshtml";
+}
+
+<div class="container-fluid">  
+  <div class="row-fluid">    
+    <div class="span12 offset4" >  
+      <div class="row">
+          <div class="span8">
+              You can give us feedback regarding application here.You are requested to 
+              give us suggestions and point out mistakes and don't show non-serious attitude.
+              We will try to remove your complaints as soon as possible. 
+              We will be thankful to you for your interest in our application.<br />
+              <br />
+              <div class="well">
+                  <form id="feedback" onsubmit="return evaluation()">
+                     <label style="color:blue">Write Some Annoucement here</label>
+                      <textarea name="comments" id="comment" required>
+                      </textarea><br />
+                      <label>Date</label>
+                      <input type="date" name="date" id="date" required/><br />
+                      <span id="result"></span>
+                      <input type="submit" value="Submit" class="btn btn-primary" />
+                  </form>
+              </div>
+          </div>
+      </div>
+    </div>  
+  </div>  
+</div> 
+<script>
+    function evaluation() {
+        var date = $('#date').val();
+        var comment=$('#comment')
+        $.ajax({
+            type: 'POST',
+            url: '/home/makeAnnouncement', data: $('#feedback').serialize(),
+            success: function (x) {
+                $('#result').css('color','blue');
+                $('#result').text(x);
+                $('#result').append('<br/>');
+            },
+            error: function (x) {
+                $('#result').css('color', 'red');
+                $('#result').text(x);
+                $('#result').append('<br/>');
+            }
+        })
+        return false;
+    }
+</script>

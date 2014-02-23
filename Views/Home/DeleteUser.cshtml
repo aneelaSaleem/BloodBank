@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "DeleteUser";
+    Layout = "~/Views/Shared/adminLayout.cshtml";
+}
+
+<div class="container-fluid">  
+  <div class="row-fluid">  
+    <div class="span10 offset4 well" >  
+      
+        <h2>Delete a user </h2>
+        <h2>Please Provide following information</h2>
+        <form method="post" id="deleteForm" onsubmit="return deleteUser()">
+            <label>User Name</label>
+            <input type="text" name="username" id="username" />
+            <label>Email</label>
+            <input type="email" name="email"  id="email"/><br />
+            <span id="errors"></span>
+            <input type="submit" id="sub" class="btn btn-primary" value="Delete"/>
+        </form>
+    </div>  
+  </div>  
+</div> 
+<script>
+    function deleteUser() {
+
+        var uname = $('#username').val();
+        var mail = $('#email').val();
+        var text = "<ul>";
+        if (uname.length == 0)
+            text += "<li>Please Enter user name</li>";
+        if (mail.length == 0)
+            text += "<li>Please Enter Email Address</li></ul>";
+        $('#errors').html(text);
+        if (text.length > 5) {
+            $('#errors').css('color', 'red');
+            return false;
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/home/Delete', data: $('#deleteForm').serialize(),
+            success: function (x) {
+                alert(x)
+                $('#errors').css('color','blue');
+                $('#errors').text(x);
+                $('#errors').append('<br/>');
+            },
+            error: function (x) {
+                $('#errors').css('color', 'red');
+                $('#errors').text("User has been deleted");
+                $('#errors').append('<br/>');
+            }
+        })
+        return false;
+    }
+</script>

@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "AdminDashboard";
+    Layout = "~/Views/Shared/adminLayout.cshtml";
+    if(ViewBag.session!=null)
+    {
+        <script>
+            alert(@ViewBag.session);
+        </script>
+    }
+}
+
+@using PagedList
+@using PagedList.Mvc
+@model IPagedList<MyWeb.Models.Event>
+<div class="container-fluid">  
+  <div class="row-fluid">   
+    <div class="span12 offset4" >  
+      <div class="row">
+          <div class="span9">
+                  @foreach (var item in Model)
+                  {
+                      <div class="well">
+                          <p>@item.Post</p>
+                          <p><b>Posted By:</b> @item.username on @item.date</p>
+                      </div>
+                  }
+          </div>
+      </div>
+        <div class="pagedList">
+        @Html.PagedListPager(Model, page => Url.Action("AdminDashboard", new { page }), PagedListRenderOptions.TwitterBootstrapPagerAligned)
+    </div>
+    </div>  
+  </div>  
+</div> 
